@@ -1,0 +1,94 @@
+1) Setting up CSS module:
+        Option 1: We can design stuff in a CSS file and import it. They will be global though. 
+                  This doesnt allow us to have same classnames accross multiple components which might result in a problem.
+                  For example:
+                    CSS files are global which means they will overwrite the styles for a component.
+                    Suppose we have person.js file which is styled by person.css.
+                    It is very hectic to come up with different classnames for each component.
+                    Say, person.css has a class of btn which it styles.
+                    And say there is another component app.js which uses app.css which also has a class btn.
+                    Since the CSS classes are global wew can only import either person.css or App.css into App.js
+                    Or, into Person.js.
+                    But sadly our bundling tool will have a conflict on these classes.
+                    The class btn that they both have will create a conflict.
+                    Therefore, we tend to have css styles only scoped to a certain Javascript file and that is where Option 2 comes in. 
+        Option 2: We can have inline styles in the js file itself. 
+                  This will allow us to have our CSS scope limited to a JS file.
+                  Create a style variable like style = {property:value} and set <component style={style}/>.
+                  This has a problem as we will need to use pseudo-selectors like :hover, @media.
+                  For this we have Radium. We will need to create a higher order Radium component that is Radium(<Component>).
+                  Now we can use pseudo selectors by something like this:
+                    style = {
+                        property:xyz
+                        ":pseudo":{
+                            property:abc
+                        }
+                    } 
+                  However there will still be a problem for media queries. For which we use <StyleRoot>.
+                  We import this and then wrap our final component with this and then pass the overall result to Radium.
+                  Problem is, it is better to have our styles in a separate file rather than inline.
+                  But we already know that this creates a problem because of the global scope issue in Option 1.
+        Option 3: CSS Modules, lets us scope a particular CSS file to only a single JS file.
+                  This lets us separate CSS from our JS code and also prevents it from having a global scope.
+
+        Steps for option 3:
+        a. Initialize a git repository. Git add and Git commit, otherwise step B will not work.
+        b. npm run eject
+        c. Step b will give us access to the config folder which will appear automatically.
+           There, we will find webpack.config.js.
+           There, look for:
+            {
+              test: cssRegex,
+              exclude: cssModuleRegex,
+              use: getStyleLoaders({
+                  sourceMap: isEnvProduction && shouldUseSourceMap
+                }),
+                // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            },
+
+            And turn it into,
+            {
+              test: cssRegex,
+              exclude: cssModuleRegex,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                modules: true,
+                localIdentIName: '[name]__[local]__[hash:base64:5]',
+                sourceMap: isEnvProduction && shouldUseSourceMap
+              }),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            }, 
+    
+    NOTE: It is said that CSS modules are already enabled by default, so do try without this step.
+
+2. Create a higher order auxillary component:
+    In react everything should be inside a div.
+    However we have two workarounds.
+    One: We could return both elemets inside as an array with unique keys assigned.
+    Two: We can pass this complete component into another component creating a higher order component.
+            The higher order component will simply return whatever is wrapped inside of it.
+            And we will use that component to wrap our divs and main to give an illusion of a single component.
+
+        NOTE: All our higher order components are in the hoc folder.
+
+Everything else is on your hands now.
+            
+3.  Architecture:
+    1. Layout contains the layout of the whole SPA. ToolBars and all that. 
+        Here, we switch only between containers by using routes.
+    2. Containers are like pages. One route is attached to one container which 
+        inturn is made up of components.
+    3. Components are used in containers. If there are any sub components, 
+        they deserve a folder of their own.
+
+4. Map-Reduce:
+    We know what map does, i.e maps each element of a list to a function. It's the same in python.
+    Now reduce is able to reform it    
