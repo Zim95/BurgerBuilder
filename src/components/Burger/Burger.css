@@ -10,19 +10,19 @@
 }
 
 ::-webkit-scrollbar{
-	width:0px;
+	width:10px;
 	background:#bdc3c7;
 	opacity:0.2;
 	border-radius:5px;
 }
 ::-webkit-scrollbar-thumb{
-	width:0px;
+	width:2px;
 	background:#95a5a6;
 	opacity:0.2;
 	border-radius:5px;
 }
 ::-moz-scrollbar{
-	width:0px;
+	width:2px;
 	background:#bdc3c7;
 	opacity:0.2;
 	border-radius:5px;
