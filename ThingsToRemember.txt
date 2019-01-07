@@ -70,17 +70,18 @@
     NOTE: It is said that CSS modules are already enabled by default, so do try without this step.
 
 2. Create a higher order auxillary component:
-    In react everything should be inside a div.
-    However we have two workarounds.
-    One: We could return both elemets inside as an array with unique keys assigned.
-    Two: We can pass this complete component into another component creating a higher order component.
-            The higher order component will simply return whatever is wrapped inside of it.
-            And we will use that component to wrap our divs and main to give an illusion of a single component.
+    a. In react everything should be inside a div.
+        However we have two workarounds.
+        One: We could return both elemets inside as an array with unique keys assigned.
+        Two: We can pass this complete component into another component creating a higher order component.
+                The higher order component will simply return whatever is wrapped inside of it.
+                And we will use that component to wrap our divs and main to give an illusion of a single component.
 
-        NOTE: All our higher order components are in the hoc folder.
+            NOTE: All our higher order components are in the hoc folder.
 
-Everything else is on your hands now.
-            
+    b. We can also create higher order components and use them like functions. Like how we used Radium, and withRouter.
+        To see what a functional hoc looks like refer: withErrorHandler.js
+
 3.  Architecture:
     1. Layout contains the layout of the whole SPA. ToolBars and all that. 
         Here, we switch only between containers by using routes.
@@ -91,4 +92,84 @@ Everything else is on your hands now.
 
 4. Map-Reduce:
     We know what map does, i.e maps each element of a list to a function. It's the same in python.
-    Now reduce is able to reform it    
+    Now reduce is able to work on the array produced by maps.
+
+5. Axios:
+    Alot of things to remember. I'll write them down when I can put them into words.
+
+    a. Do not get confused between DidMount and DidUpdate. setState will update the dom, i.e it will re render. 
+    Did Mount will only be called once. Therefore, an infinite loop is observed in DidUpdate when setState is called there.
+    In DidMount this method will be called only once. Therefore, it is not a threat.
+    However, we may need to use setState on DidUpdate based on our usecase. For example, 
+    If we need to get some data after the component has already been rendered, then we will need to use it in DidUpdate.
+    Like some click event that will trigger the HTTP Request. The component is already there and DidMount has already been executed.
+    However, we can use DidUpdate as that method will be called upon recieving props and will decide whether we need to rerender based on props.
+    Therefore, we need to use DidUpdate here.
+    However, to avoid an infinite loop we will add custom checks and fire the http request and setState only if the check is valid.
+    For example, if the data is recieved, then we need not send the request over and over again.
+
+6. Routing:
+    a. The index should wrap its app component in BrowserRouter.
+    b. In app.js we set up the routes, we use Route component for that. All components rendered by Route component 
+        have access to history and match properties. However, these properties are not accessible to sub components.
+        One way to make them accessible is by passing them to subcomponents as well.
+        However, wwe use a higher order component called withRouter just like withErrorHandler(that we created).
+        Each subcomponent can be a withRouter() hoc component and this will also allow those subcomponents to have history
+        and map.
+        NOTE: history can be used for navigation whereas map can be used to obtain query params and all.
+                Investigate the properties by using console log
+    c. path property in Route component will have "/" and "/something". However, this kind of works as regex.
+        So in this path: "/something", both "/" and "/something" will match. Therefore both components will be loaded.
+        We can solve this in the following ways:
+            i.   Use exact: exact will evaluate the regex exactly as it is mentioned. However, there may be problems
+                            when we need to constantly keep adding the base url to every route.
+            ii.  Use switch: <Switch></Switch> component from 'react-router-dom' can be used to only display one of these routes.
+                            Problem when we enter a route '/something' we cannot have '/' evaluated before '/something'.
+                            Since we dont use exact anymore, '/something' will pass the check for '/' and since we are using 
+                            switch, only one will be evaluated and we will end up with the component in '/' route.
+                            Therefore, we need to place '/something' evaluation before '/' evaluation.
+    d. in the history property when we push the page into stack we usually give it a url. However, this can also be an object.
+        this.props.history.push({
+            pathname: '/<url>',
+            search:'queryparams'
+        })
+    e. You can always render components like this: <Route path="/" component={Component}/>. But this way, wew will never be able to add properties.
+        So we can use render to rather execute a function. Since, render is just a render method.
+        What we normally did,
+            <Route path="/" render={<h1>Stuff</h1>}/>
+            This is like returning simple jsx
+        Now, what we do is,
+            <Route path="/" render={()=>(<Component props={...stuff}/>);}
+        This basically allows us to render components by passing props.
+    f.This is very important:
+        When we have links for different routes on the navbar, we commonly use <a></a> tags and then set it's href properties to redirect.
+        However, when doing this we will end up reloading the page.
+        This means all state will be lost.
+        To avoid this we use a Component called <NavLink/> provided by react-router-dom.
+        Navlink:
+            - Navlink can be used to replace <a></a> tags so that we do not reload the whole page.
+                and do not reset the state.
+            - Instead of href it has a "to" property which we can use to set urls.
+            - It also has it's own active class. Using which it will automatically set a link to active upon visit.
+            - We can overwrite the style for this active class in our CSS file.
+            - Problem is our CSS module will translate the active class to something else. Some encrypted value as we have seen.
+            - To solve this, <Navlink/> also has a property called activeClassName which will allow us to tell Navlink,
+                which of our own CSS encrypted classNames will be assigned to it's active class.
+            - Also, we will face another problem, as we know, all routes that have '/' in front like '/checkout' or '/something'
+                will pass the check for '/'.
+            - This means that for '/' only one link will be active, but for '/something', both '/' and '/something' Links will be active.
+            - This can be solved using the exact property.
+            - In our case, we have a NavigationItem component which we styled and a NavigtaionItems component 
+                which is a collection of multiple NavigtaionItem component.
+            - If wew set exact to NavigationItem the problem is it will apply exact to true to all NavigationItem components.
+            - We do not want that. Therefore, in the collection component we need to specify where we need to set exact property to true.
+            - Checkout NavigationItems.js and NavigationItem.js for reference.
+
+7. Styling:
+    When we want to have different property values for a single component when it is imported in different layouts.
+    We can pass the height via props.
+    Or we can overwrite it's css locally.
+    Check out Logo class on Toolbar and Sidebar for reference.
+
+8. Syntax: Arrays, object immutability. talk about that.
+9. Lifecycle: Talk about all lifecycle methods.
