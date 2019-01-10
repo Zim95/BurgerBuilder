@@ -166,10 +166,11 @@
             - Checkout NavigationItems.js and NavigationItem.js for reference.
 
 7. Styling:
-    When we want to have different property values for a single component when it is imported in different layouts.
-    We can pass the height via props.
-    Or we can overwrite it's css locally.
-    Check out Logo class on Toolbar and Sidebar for reference.
-
+    a. When we want to have different property values for a single component when it is imported in different layouts.
+        We can pass the height via props.
+        Or we can overwrite it's css locally.
+        Check out Logo class on Toolbar and Sidebar for reference.
+    b. When using {...props} in <input/> element be sure to add it before "className" property. Like, <input {...props} className={classes.clsnm}/>
+    
 8. Syntax: Arrays, object immutability. talk about that.
 9. Lifecycle: Talk about all lifecycle methods.
