@@ -171,6 +171,6 @@
         Or we can overwrite it's css locally.
         Check out Logo class on Toolbar and Sidebar for reference.
     b. When using {...props} in <input/> element be sure to add it before "className" property. Like, <input {...props} className={classes.clsnm}/>
-    
+    c. Incase you want to check the hashed classname from css modules. Simply console.log it. Like, console.log(classes.<classname>);
 8. Syntax: Arrays, object immutability. talk about that.
 9. Lifecycle: Talk about all lifecycle methods.
