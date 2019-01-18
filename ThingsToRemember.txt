@@ -174,3 +174,7 @@
     c. Incase you want to check the hashed classname from css modules. Simply console.log it. Like, console.log(classes.<classname>);
 8. Syntax: Arrays, object immutability. talk about that.
 9. Lifecycle: Talk about all lifecycle methods.
+10. Redux: 
+    Once, the redux devtools are installed, we need to do this to the store for it to run:
+    const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
