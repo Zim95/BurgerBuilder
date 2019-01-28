@@ -191,4 +191,14 @@
                 --> react-test-renderer: Dependency of enzyme that we need to install separately.
                 --> enzyme-adapter-react-16: Enzyme adapter to connect it to react 16.
 
+    We have covered testing:
+    a. Components : Check out NavigationItems.test.js
+    b. Containers: Check out BurgerBuilder.test.js
+    c. Redux: Check out auth.test.js in the reducers folder.
+
+    NOTE: ENZYME is only needed to create wrapper element. That is when we are testing React components with JSX involved.
+          Otherwise, Jest is enough.
+          We have used only JEST while testing redux. So be sure to check the difference in the files where ENZYME is used
+          and in the files where only JEST has been used.
+
 
