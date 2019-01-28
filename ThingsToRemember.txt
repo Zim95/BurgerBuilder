@@ -68,6 +68,7 @@
             }, 
     
     NOTE: It is said that CSS modules are already enabled by default, so do try without this step.
+    UPDATE: This step is necessary for css modules to work.
 
 2. Create a higher order auxillary component:
     a. In react everything should be inside a div.
