@@ -201,4 +201,12 @@
           We have used only JEST while testing redux. So be sure to check the difference in the files where ENZYME is used
           and in the files where only JEST has been used.
 
+12 Deployment:
+    a. Check base path when using Router.
+    b. Building and Optimimzing: We have a command for that in npm. That is, npm run build.
+    c. Always handle 404 cases for index.html. To ensure routing works properly.
+    d. Upload build to static server. After the building process, we will only have HTML,CSS and JS files,
+        that are static and can be served through file servers like AWS S3. So we will do that.
+    e. 
+
 
