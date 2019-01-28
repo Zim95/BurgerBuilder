@@ -178,4 +178,17 @@
 10. Redux: 
     Once, the redux devtools are installed, we need to do this to the store for it to run:
     const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+11. Testing:
+    JEST = Test Runner -> executes the test code as per a certain environment 
+            (because the actual environment is nodejs but javascript libraries change the environment to emulate a browser)
+            and provides a validation library (a library that allows us to do comparisons and throw errors).
+    ENZYME = Testing Utilities -> Emulating the components for Test Runner. 
+             Otherwise how else will we give the test runner, an illusion of the component being loaded.
+             It's like mounting them to some non-existent dom.
+             To install enzyme:
+             -> enzyme: core package
+             -> Two additional packages are required to make enzyme work correctly with JEST and REACT.
+                --> react-test-renderer: Dependency of enzyme that we need to install separately.
+                --> enzyme-adapter-react-16: Enzyme adapter to connect it to react 16.
+
 
